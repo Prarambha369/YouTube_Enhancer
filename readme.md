@@ -1,6 +1,7 @@
 # YouTube Enhancer
 
 YouTube Enhancer is a browser extension designed to improve your YouTube experience by providing additional features and customization options.
+![image](https://github.com/user-attachments/assets/9f309c20-5f6d-4098-ba6c-09f74a5dd0cc)
 
 ## Features
 
