@@ -1,46 +1,14 @@
-/* Complete Cleanup CSS */
-ytd-rich-grid-renderer,
-ytd-mini-guide-renderer,
-ytd-rich-section-renderer,
-#secondary,
-#comments,
-#related,
-ytd-watch-next-secondary-results-renderer,
-#masthead-container,
-#player-ads,
-ytd-searchbox-legacy-button,
-#voice-search-button,
-#container.ytd-masthead,
-ytd-video-meta-block,
-#metadata-line,
-#info-container,
-#description,
-#buttons,
-#endpoint.yt-simple-endpoint,
-ytd-thumbnail-overlay-time-status-renderer,
-#primary.ytd-watch-flexy,
-#player-container,
-#columns,
-#below,
-#scroll-container,
-ytd-item-section-renderer,
-#header,
-ytd-browse[page-subtype="home"] #contents,
-#footer,
-ytd-guide-section-renderer,
-#chips-wrapper,
-#container.ytd-searchbox,
-#contents.ytd-rich-grid-renderer {
+/* Custom YouTube Styling */
+
+body.youtube-enhancer-enabled .ytd-rich-grid-renderer,
+body.youtube-enhancer-enabled #secondary,
+body.youtube-enhancer-enabled #related,
+body.youtube-enhancer-enabled #player-ads {
   display: none !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 /* Search Bar Customization */
-#search-form {
+body.youtube-enhancer-enabled #search-form {
   position: fixed !important;
   top: 20px !important;
   left: 50% !important;
@@ -82,9 +50,207 @@ ytd-guide-section-renderer,
 }
 
 /* Video Grid Layout */
-ytd-rich-grid-row {
+body.youtube-enhancer-enabled ytd-rich-grid-row {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
   gap: 20px !important;
   padding: 20px !important;
+}
+
+/* Custom button */
+.custom-button {
+  background: #cc0000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin: 8px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background: #ff0000;
+}
+
+/* Custom Video Player */
+body.youtube-enhancer-enabled #player {
+  background: #181818;
+  color: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+body.youtube-enhancer-enabled #player video {
+  border-radius: 8px;
+}
+
+body.youtube-enhancer-enabled #player .ytp-chrome-bottom {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Additional element filters */
+body.youtube-enhancer-enabled #header > .ytd-rich-grid-renderer.style-scope,
+body.youtube-enhancer-enabled ytd-mini-guide-renderer.ytd-app.style-scope,
+body.youtube-enhancer-enabled .ytd-rich-section-renderer.style-scope > .ytd-rich-shelf-renderer.style-scope,
+body.youtube-enhancer-enabled #end > .ytd-masthead.style-scope,
+body.youtube-enhancer-enabled .ytd-menu-renderer.style-scope > .yt-spec-icon-shape.yt-icon.style-scope.yt-icon-shape > div,
+body.youtube-enhancer-enabled #voice-search-button > .ytd-masthead.style-scope > yt-button-shape,
+body.youtube-enhancer-enabled #guide-button,
+body.youtube-enhancer-enabled #country-code,
+body.youtube-enhancer-enabled #logo-icon > .yt-spec-icon-shape.yt-icon.style-scope.yt-icon-shape > div,
+body.youtube-enhancer-enabled .no-transition.ytd-comment-view-model.style-scope > .yt-img-shadow.style-scope,
+body.youtube-enhancer-enabled .no-transition.ytd-comment-view-model.style-scope,
+body.youtube-enhancer-enabled #author-thumbnail > .yt-img-shadow.style-scope,
+body.youtube-enhancer-enabled .no-transition.ytd-comment-simplebox-renderer.style-scope,
+body.youtube-enhancer-enabled #avatar > .yt-img-shadow.style-scope,
+body.youtube-enhancer-enabled .no-transition.ytd-video-owner-renderer.style-scope,
+body.youtube-enhancer-enabled #like-button,
+body.youtube-enhancer-enabled #dislike-button > yt-button-shape,
+body.youtube-enhancer-enabled #menu > .ytd-watch-metadata.style-scope,
+body.youtube-enhancer-enabled #subscribe-button-shape,
+body.youtube-enhancer-enabled #title > .ytd-comments-header-renderer.style-scope,
+body.youtube-enhancer-enabled ytd-merch-shelf-renderer.ytd-watch-flexy.style-scope,
+body.youtube-enhancer-enabled ytd-reel-shelf-renderer.ytd-item-section-renderer.style-scope,
+body.youtube-enhancer-enabled #scroll-container > .yt-chip-cloud-renderer.style-scope,
+body.youtube-enhancer-enabled .YtVideoMetadataCarouselViewModelHost,
+body.youtube-enhancer-enabled #pinned-comment-badge,
+body.youtube-enhancer-enabled #actions,
+body.youtube-enhancer-enabled #foreground-content,
+body.youtube-enhancer-enabled ytd-reel-shelf-renderer.ytd-structured-description-content-renderer.style-scope,
+body.youtube-enhancer-enabled ytd-video-description-infocards-section-renderer.ytd-structured-description-content-renderer.style-scope,
+body.youtube-enhancer-enabled a.bold.yt-formatted-string.style-scope.yt-simple-endpoint,
+body.youtube-enhancer-enabled .ytp-button.ytp-next-button,
+body.youtube-enhancer-enabled .ytp-autonav-toggle-button,
+body.youtube-enhancer-enabled #playlist-actions,
+body.youtube-enhancer-enabled .ytd-playlist-panel-renderer.style-scope.publisher,
+body.youtube-enhancer-enabled #header-top-row,
+body.youtube-enhancer-enabled .no-transition.ytd-video-renderer.style-scope > .yt-img-shadow.style-scope,
+body.youtube-enhancer-enabled .no-transition.ytd-comment-replies-renderer.style-scope > .yt-img-shadow.style-scope,
+body.youtube-enhancer-enabled .no-transition.ytd-comment-replies-renderer.style-scope,
+body.youtube-enhancer-enabled .yt-spec-avatar-shape--cairo-refresh.yt-spec-avatar-shape--live-ring,
+body.youtube-enhancer-enabled #avatar-section,
+body.youtube-enhancer-enabled .YtSearchboxComponentClearButton,
+body.youtube-enhancer-enabled .yt-lockup-view-model-wiz--collection-stack-2.yt-lockup-view-model-wiz--horizontal.yt-lockup-view-model-wiz .yt-collection-thumbnail-view-model {
+  display: none !important;
+}
+/* Additional YouTube element filters */
+body.youtube-enhancer-enabled #vote-count-middle,
+body.youtube-enhancer-enabled .ytd-live-chat-frame.style-scope > yt-button-shape,
+body.youtube-enhancer-enabled #show-hide-button > .ytd-live-chat-frame.style-scope,
+body.youtube-enhancer-enabled #published-time-text > .ytd-comment-view-model.style-scope.yt-simple-endpoint,
+body.youtube-enhancer-enabled #creator-heart-button,
+body.youtube-enhancer-enabled ytd-item-section-renderer.ytd-watch-next-secondary-results-renderer.style-scope > .ytd-item-section-renderer.style-scope {
+  display: none !important;
+}
+body.youtube-enhancer-enabled .ytd-comment-renderer.style-scope.ytd-watch-comment-renderer {
+  background: #181818;
+  color: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Custom styles for the video player */
+body.youtube-enhancer-enabled #player-container {
+    background-color: #202124 !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled #player-theater-container {
+    background-color: #181818 !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-bottom {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-top {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-controls {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-controls .ytp-button {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50% !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-controls .ytp-button:hover {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-controls .ytp-volume-panel {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 10px !important;
+}
+/* Enhanced Video Player Styling from Tampermonkey */
+body.youtube-enhancer-enabled #movie_player {
+    width: 100% !important;
+    height: 100% !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .html5-video-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .video-stream {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled ytd-watch-flexy[theater] #player-theater-container {
+    height: 100vh !important;
+    border-radius: 10px !important;
+}
+
+/* Style for video controls */
+body.youtube-enhancer-enabled .ytp-chrome-bottom {
+    width: 100% !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-progress-bar-container {
+    width: 100% !important;
+    height: 8px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+body.youtube-enhancer-enabled .ytp-progress-bar {
+    width: 100% !important;
+    height: 8px !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-scrubber-button {
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    background-color: #ff0000 !important;
+}
+
+/* Disable sideways scrolling */
+body.youtube-enhancer-enabled ::-webkit-scrollbar {
+    display: none;
+}
+
+body.youtube-enhancer-enabled html,
+body.youtube-enhancer-enabled body {
+    overflow-x: hidden !important;
 }

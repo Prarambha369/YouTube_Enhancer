@@ -1,90 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>YouTube Enhancer</title>
-    <style>
-        body {
-            width: 200px;
-            padding: 15px;
-            font-family: 'Arial', sans-serif;
-            background: #202124;
-            color: #ffffff;
-        }
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #f56060;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: #ffffff;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #60f5ac;
-        }
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-        .icon {
-            display: block;
-            margin: 0 auto 15px auto;
-            width: 128px;
-            height: 128px;
-        }
-        footer {
-            text-align: center;
-            font-size: 12px;
-            color: #ffffff;
-            margin-top: 20px;
-        }
-        footer a {
-            color: #60f5ac;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-<img src="icons/icon128.png" alt="YouTube Enhancer Icon" class="icon">
-<h3 style="margin: 0 0 15px 0; color: #60f5f5;">YouTube Enhancer</h3>
-<div class="toggle-container">
-    <span>Extension Status:</span>
-    <label class="switch">
-        <input type="checkbox" id="toggleSwitch">
-        <span class="slider"></span>
-    </label>
-</div>
-<div id="statusText" style="text-align: center; color: #60f5f5;">Loading...</div>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>YouTube Enhancer</title>
+        <style>
+            body {
+                width: 200px;
+                padding: 15px;
+                font-family: 'Arial', sans-serif;
+                background: #202124;
+                color: #ffffff;
+            }
+            .toggle-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 10px 0;
+            }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 26px;
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #f56060;
+                transition: .4s;
+                border-radius: 34px;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 20px;
+                width: 20px;
+                left: 3px;
+                bottom: 3px;
+                background-color: #ffffff;
+                transition: .4s;
+                border-radius: 50%;
+            }
+            input:checked + .slider {
+                background-color: #60f5ac;
+            }
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+            .icon {
+                display: block;
+                margin: 0 auto 15px auto;
+                width: 64px;
+                height: 64px;
+            }
+            footer {
+                text-align: center;
+                font-size: 12px;
+                color: #ffffff;
+                margin-top: 20px;
+            }
+            footer a {
+                color: #60f5ac;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+    <img src="icons/icon128.png" alt="YouTube Enhancer Icon" class="icon">
+    <h3 style="margin: 0 0 15px 0; color: #60f5f5;">YouTube Enhancer</h3>
+    <div class="toggle-container">
+        <span>Extension Status:</span>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <div id="statusText" style="text-align: center; color: #60f5f5;">Loading...</div>
 
-<footer>
-    &copy; 2024 <a href="https://github.com/Prarambha369/youtube-enhancer" target="_blank">Mister Bashyal</a>
-</footer>
+    <button id="clearHistory" style="width: 100%; margin-top: 15px; padding: 8px; background: #cc0000; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Watch History</button>
 
-<script src="popup.js"></script>
-</body>
-</html>
+    <footer>
+        &copy; 2025 <a href="https://github.com/Prarambha369/youtube-enhancer" target="_blank">Mister Bashyal</a>
+    </footer>
+
+    <script src="popup.js"></script>
+    </body>
+    </html>

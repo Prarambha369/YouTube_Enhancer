@@ -1,10 +1,11 @@
 # YouTube Enhancer
+![icon128.png](youtube-enhancer/icons/icon128.png)
 
 YouTube Enhancer is a browser extension designed to improve your YouTube experience by providing additional features and customization options.
-![image](https://github.com/user-attachments/assets/9f309c20-5f6d-4098-ba6c-09f74a5dd0cc)
+
+![img.png](youtube-enhancer/icons/img.png)
 
 ## Features
-
 - **Extension Status Toggle**: Easily enable or disable the extension from the popup.
 - **Custom Search Bar**: A fixed search bar with enhanced styling.
 - **Completion Status Panel**: Track your video watching progress, saved items, and learning goals.
