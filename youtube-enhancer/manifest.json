@@ -1,7 +1,7 @@
 {
-    "manifest_version": 3,
+    "manifest_version": 2,
     "name": "Enhanced YouTube Experience",
-    "version": "0.6",
+    "version": "0.7",
     "description": "Adds history clearing, UI improvements, and toggle controls",
     "permissions": ["storage", "scripting", "activeTab"],
     "host_permissions": ["*://*.youtube.com/*"],
