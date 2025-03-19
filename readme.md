@@ -45,3 +45,30 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For any inquiries, please contact [Mister Bashyal](https://github.com/Prarambha369).
+```js
+youtube-enhancer/
+│
+├── Functions/
+│   ├── vidplayer.css
+│   ├── shorts2long.css
+│   ├── subs-comment.js
+│   ├── vidplayer.js
+│   ├── subsbutton.js
+│   ├── subs-comment.css
+│   ├── shortsblock.css
+│   ├── element-hiding.css
+│   ├── shortsblock.js
+│
+├── manifest.json       # Extension configuration
+├── popup.html          # Extension popup interface
+├── popup.js            # Popup functionality and logic
+├── popup_styles.css    # Popup styling
+├── feature-handlers.js  # Background service worker
+├── content.js          # Content script for YouTube pages
+└── icons/
+├── icon48.png      # Small extension icon
+├── icon128.png     # Medium extension icon
+├── icon16.png      # Tiny extension icon
+├── icon32.png      # Additional icon size
+└── trash.png       # Additional image asset
+```

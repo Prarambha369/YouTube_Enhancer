@@ -7,3 +7,13 @@
     padding: 1px 3px;
     border-radius: 3px;
 }
+.youtube-enhancer-comments {
+    background: #1a1a1a !important;
+    border-radius: 8px;
+    padding: 15px !important;
+}
+
+.youtube-enhancer-pinned-comment {
+    border-left: 3px solid #60f5ac !important;
+    background: rgba(96, 245, 172, 0.1) !important;
+}

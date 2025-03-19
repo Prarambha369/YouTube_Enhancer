@@ -1,7 +1,15 @@
 const CONFIG = {
     STATUS_UPDATE_DELAY: 2000,
     DEFAULT_ENABLED: true,
-    ANIMATION_DURATION: 300
+    ANIMATION_DURATION: 300,
+    // Feature names exactly matching content.js CONFIG.FEATURE_FILES keys
+    FEATURES: [
+        "vid",
+        "shorts2long",
+        "subsComment",
+        "sblock",
+        "subsbutton"
+    ]
 };
 
 // Set current year in footer
@@ -34,11 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to load feature states from storage
     function loadFeatureStates() {
-        chrome.storage.sync.get(['gridLayout', 'adBlocker', 'cleanUI', 'playerMods'], (result) => {
-            document.querySelector('.feature-toggle[data-feature="gridLayout"]').checked = result.gridLayout !== false;
-            document.querySelector('.feature-toggle[data-feature="adBlocker"]').checked = result.adBlocker !== false;
-            document.querySelector('.feature-toggle[data-feature="cleanUI"]').checked = result.cleanUI !== false;
-            document.querySelector('.feature-toggle[data-feature="playerMods"]').checked = result.playerMods !== false;
+        // Get all feature keys
+        chrome.storage.sync.get(CONFIG.FEATURES, (result) => {
+            // Update each toggle based on stored state - use the exact same names as content.js
+            CONFIG.FEATURES.forEach(feature => {
+                const toggle = document.querySelector(`.feature-toggle[data-feature="${feature}"]`);
+                if (toggle) {
+                    // Default to true if not explicitly set to false
+                    toggle.checked = result[feature] !== false;
+                    console.log(`Loading ${feature} state:`, toggle.checked);
+                }
+            });
         });
     }
 
@@ -48,10 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const feature = e.target.dataset.feature;
             const isEnabled = e.target.checked;
 
+            console.log(`Toggle ${feature}:`, isEnabled);
+
             // Save feature state to storage
             const storageUpdate = {};
             storageUpdate[feature] = isEnabled;
-            chrome.storage.sync.set(storageUpdate);
+            chrome.storage.sync.set(storageUpdate, () => {
+                console.log(`Saved ${feature} state:`, isEnabled);
+            });
 
             // Notify content script about feature change
             chrome.tabs.query({ url: '*://*.youtube.com/*' }, function(tabs) {
@@ -63,6 +81,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             });
+
+            // Visual feedback
+            const featureName = document.querySelector(`.feature-card.${feature} .feature-title`)?.textContent || feature;
+            updateStatus(
+                statusText,
+                `${featureName} ${isEnabled ? 'enabled' : 'disabled'}`,
+                'success'
+            );
+
+            // Reset status after delay
+            setTimeout(() => {
+                updateStatus(
+                    statusText,
+                    isExtensionEnabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
+                    isExtensionEnabled ? 'active' : 'inactive'
+                );
+            }, CONFIG.STATUS_UPDATE_DELAY);
         });
     });
 
@@ -124,6 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Track global extension state
+let isExtensionEnabled = true;
+
 async function checkYouTubeTab() {
     try {
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -140,12 +178,12 @@ function initializeExtensionState(toggle, statusText) {
 
     // Get extension state from storage
     chrome.storage.sync.get(['extensionEnabled'], (result) => {
-        const isEnabled = result.extensionEnabled !== false;
-        toggle.checked = isEnabled;
+        isExtensionEnabled = result.extensionEnabled !== false;
+        toggle.checked = isExtensionEnabled;
         updateStatus(
             statusText,
-            isEnabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
-            isEnabled ? 'active' : 'inactive'
+            isExtensionEnabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
+            isExtensionEnabled ? 'active' : 'inactive'
         );
     });
 }
