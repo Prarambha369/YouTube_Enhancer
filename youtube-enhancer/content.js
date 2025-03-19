@@ -17,20 +17,18 @@
   const injectedElements = {};
   const activeFeatureCleanups = {};
 
-  async function initialize() {
+  function initialize() {
     console.log('Initializing content script');
-    await chrome.storage.sync.get(['extensionEnabled'], (result) => {
+    
+    chrome.storage.sync.get(['extensionEnabled']).then((result) => {
       isExtensionEnabled = result.extensionEnabled !== false;
       toggleExtensionFeatures(isExtensionEnabled);
-    });
-
-    await chrome.storage.sync.get(Object.keys(CONFIG.FEATURE_FILES), (features) => {
-      console.log('Feature states:', features);
-      Object.keys(CONFIG.FEATURE_FILES).forEach((feature) => {
-        if (features[feature] !== false) {
-          enableFeature(feature);
-        }
-      });
+      
+      if (isExtensionEnabled) {
+        loadEnabledFeatures();
+      }
+    }).catch(err => {
+      console.error('Error getting extension state:', err);
     });
 
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -44,18 +42,30 @@
     });
   }
 
+  function loadEnabledFeatures() {
+    chrome.storage.sync.get(Object.keys(CONFIG.FEATURE_FILES)).then((features) => {
+      console.log('Feature states:', features);
+      Object.keys(CONFIG.FEATURE_FILES).forEach((feature) => {
+        if (features[feature] !== false) {
+          enableFeature(feature);
+        }
+      });
+    }).catch(err => {
+      console.error('Error loading feature states:', err);
+    });
+  }
+
   function handleToggleExtension(enabled) {
     isExtensionEnabled = enabled;
     toggleExtensionFeatures(enabled);
-    Object.keys(CONFIG.FEATURE_FILES).forEach((feature) => {
-      chrome.storage.sync.get([feature], (result) => {
-        if (result[feature] && isExtensionEnabled) {
-          enableFeature(feature);
-        } else {
-          disableFeature(feature);
-        }
+    
+    if (enabled) {
+      loadEnabledFeatures();
+    } else {
+      Object.keys(CONFIG.FEATURE_FILES).forEach((feature) => {
+        disableFeature(feature);
       });
-    });
+    }
   }
 
   function handleToggleFeature(feature, enabled) {
@@ -109,6 +119,15 @@
   }
 
   function injectCSS(feature) {
+    // First inject variables.css if it's not already there
+    if (!document.getElementById('youtube-enhancer-variables')) {
+      const variablesLink = document.createElement('link');
+      variablesLink.rel = 'stylesheet';
+      variablesLink.href = chrome.runtime.getURL('styles/variables.css');
+      variablesLink.id = 'youtube-enhancer-variables';
+      document.head.appendChild(variablesLink);
+    }
+    
     const existingLink = document.getElementById(`youtube-enhancer-${feature}-css`);
     if (existingLink) existingLink.remove();
     const link = document.createElement('link');

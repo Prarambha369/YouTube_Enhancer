@@ -26,7 +26,21 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icons/*.png"],
+      "resources": [
+        "features/vidplayer.js",
+        "features/vidplayer.css",
+        "features/shorts2long.js",
+        "features/shorts2long.css",
+        "features/subs-comment.js",
+        "features/subs-comment.css",
+        "features/subsbutton.js",
+        "features/subsbutton.css",
+        "features/shortsblock.js",
+        "features/shortsblock.css",
+        "styles/variables.css",
+        "styles/responsive.css",
+        "styles/themes.css"
+      ],
       "matches": ["*://*.youtube.com/*"]
     }
   ]

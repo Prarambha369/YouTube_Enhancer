@@ -1,50 +1,17 @@
 # YouTube Enhancer
-![icon128.png](youtube-enhancer/icons/icon128.png)
 
-YouTube Enhancer is a browser extension designed to improve your YouTube experience by providing additional features and customization options.
+![YouTube Enhancer Logo](youtube-enhancer/icons/img.png)
 
-![img.png](youtube-enhancer/icons/img.png)
+YouTube Enhancer is a powerful browser extension that enhances your YouTube experience by adding various features and customization options. Whether you want to improve your video watching experience or streamline your interactions on the platform, this extension has you covered.
 
-## Features
-- **Extension Status Toggle**: Easily enable or disable the extension from the popup.
-- **Custom Search Bar**: A fixed search bar with enhanced styling.
-- **Completion Status Panel**: Track your video watching progress, saved items, and learning goals.
-- **Video Grid Layout**: Improved video grid layout for a better browsing experience.
+## Key Features
 
-## Installation
+- **Enhanced Video Player**: Enjoy a more immersive video playback experience with improved controls and styling.
+- **Subscription and Comments Enhancements**: Customize how you interact with comments and subscriptions for a better engagement experience.
+- **Shorts to Long Video Redirect**: Automatically redirect YouTube Shorts to their corresponding long-form videos for easier viewing.
+- **Clear History Button**: Quickly clear your YouTube watch history with a single click.
+- **Customizable Settings**: Toggle features on and off based on your preferences directly from the extension popup.
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/Prarambha369/youtube-enhancer.git
-    ```
-2. Open your browser and navigate to the extensions page:
-    - **Chrome**: `chrome://extensions/`
-    - **Firefox**: `about:addons`
-3. Enable "Developer mode" (Chrome) or "Debug mode" (Firefox).
-4. Click "Load unpacked" (Chrome) or "Load Temporary Add-on" (Firefox) and select the cloned repository folder.
-
-## Usage
-
-1. Click on the YouTube Enhancer icon in your browser toolbar to open the popup.
-2. Use the toggle switch to enable or disable the extension.
-3. Customize your YouTube experience with the provided features.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- [YouTube](https://www.youtube.com) for the platform.
-- [GitHub](https://github.com) for hosting the repository.
-
-## Contact
-
-For any inquiries, please contact [Mister Bashyal](https://github.com/Prarambha369).
 ```js
 youtube-enhancer/
 │
@@ -72,3 +39,40 @@ youtube-enhancer/
 ├── icon32.png      # Additional icon size
 └── trash.png       # Additional image asset
 ```
+
+## Installation Guide
+1. **Clone the Repository**:
+    ```bash
+    git clone https://github.com/Prarambha369/youtube-enhancer.git
+    ```
+2. **Open the Extensions Page**:
+   - For **Chrome**: Navigate to `chrome://extensions/`
+   - For **Firefox**: Go to `about:addons`
+3. **Enable Developer Mode** (Chrome) or Debug Mode (Firefox).
+4. **Load the Extension**:
+   - Click on "Load unpacked" (Chrome) or "Load Temporary Add-on" (Firefox) and select the folder where you cloned the repository.
+
+## How to Use
+
+1. Click on the YouTube Enhancer icon in your browser toolbar to open the popup interface.
+- ![img.png](img.png)
+2. Use the toggle switches to enable or disable specific features according to your needs.
+- 
+3. Enjoy a personalized YouTube experience tailored to your preferences!
+
+## Contributing
+
+We welcome contributions from the community! If you have suggestions, improvements, or bug fixes, please feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. For more details, please refer to the [LICENSE](LICENSE) file.
+
+## Acknowledgments
+
+- Special thanks to the YouTube platform for providing a space for content creators and viewers.
+- Thanks to the open-source community for their continuous support and contributions.
+
+## Contact Information
+
+For any questions or feedback, please reach out to [Mister Bashyal](https://github.com/Prarambha369). Your input is valuable to us!
