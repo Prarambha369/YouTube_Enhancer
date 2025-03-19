@@ -2,7 +2,7 @@
 
 A lightweight, open-source browser extension that improves your YouTube experience with essential quality-of-life enhancements while respecting your privacy.
 
-![YouTube Enhancer Logo](icons/img.png)
+![YouTube Enhancer Logo](youtube-enhancer/icons/icon128.png)
 
 > **Note**: This extension is currently in development and may not be fully functional. Please report any issues you encounter.
 
