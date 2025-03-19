@@ -1,78 +1,116 @@
 # YouTube Enhancer
 
-![YouTube Enhancer Logo](youtube-enhancer/icons/img.png)
+A lightweight, open-source browser extension that improves your YouTube experience with essential quality-of-life enhancements while respecting your privacy.
 
-YouTube Enhancer is a powerful browser extension that enhances your YouTube experience by adding various features and customization options. Whether you want to improve your video watching experience or streamline your interactions on the platform, this extension has you covered.
+![YouTube Enhancer Logo](icons/img.png)
 
-## Key Features
+> **Note**: This extension is currently in development and may not be fully functional. Please report any issues you encounter.
 
-- **Enhanced Video Player**: Enjoy a more immersive video playback experience with improved controls and styling.
-- **Subscription and Comments Enhancements**: Customize how you interact with comments and subscriptions for a better engagement experience.
-- **Shorts to Long Video Redirect**: Automatically redirect YouTube Shorts to their corresponding long-form videos for easier viewing.
-- **Clear History Button**: Quickly clear your YouTube watch history with a single click.
-- **Customizable Settings**: Toggle features on and off based on your preferences directly from the extension popup.
+## Features
 
-```js
-youtube-enhancer/
-│
-├── Functions/
-│   ├── vidplayer.css
-│   ├── shorts2long.css
-│   ├── subs-comment.js
-│   ├── vidplayer.js
-│   ├── subsbutton.js
-│   ├── subs-comment.css
-│   ├── shortsblock.css
-│   ├── element-hiding.css
-│   ├── shortsblock.js
-│
-├── manifest.json       # Extension configuration
-├── popup.html          # Extension popup interface
-├── popup.js            # Popup functionality and logic
-├── popup_styles.css    # Popup styling
-├── feature-handlers.js  # Background service worker
-├── content.js          # Content script for YouTube pages
-└── icons/
-├── icon48.png      # Small extension icon
-├── icon128.png     # Medium extension icon
-├── icon16.png      # Tiny extension icon
-├── icon32.png      # Additional icon size
-└── trash.png       # Additional image asset
-```
+- **Cleaner Interface**: Removes ads, promotional content, and other distractions
+- **Enhanced Video Grid**: Improves the video browsing experience with a better grid layout
+- **Focus Mode**: One-click immersive viewing experience
+- **Advanced Playback Controls**: Easily adjust video speed with a convenient dropdown menu
+- **Performance Optimized**: Minimal impact on browser performance
 
-## Installation Guide
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/Prarambha369/youtube-enhancer.git
-    ```
-2. **Open the Extensions Page**:
-   - For **Chrome**: Navigate to `chrome://extensions/`
-   - For **Firefox**: Go to `about:addons`
-3. **Enable Developer Mode** (Chrome) or Debug Mode (Firefox).
-4. **Load the Extension**:
-   - Click on "Load unpacked" (Chrome) or "Load Temporary Add-on" (Firefox) and select the folder where you cloned the repository.
+## Installation
 
-## How to Use
+### From Chrome Web Store
+*(Coming soon)*
 
-1. Click on the YouTube Enhancer icon in your browser toolbar to open the popup interface.
-- ![img.png](img.png)
-2. Use the toggle switches to enable or disable specific features according to your needs.
-- 
-3. Enjoy a personalized YouTube experience tailored to your preferences!
+### Manual Installation (Developer Mode)
+1. Download or clone this repository to your local machine
+2. Open Chrome/Edge/Brave and navigate to `chrome://extensions/`
+3. Enable "Developer mode" at the top-right corner
+4. Click "Load unpacked" and select the extension directory
+5. YouTube Enhancer is now installed!
+
+## Usage
+
+After installation, simply navigate to YouTube.com. The extension will automatically:
+
+- Apply a cleaner interface by removing ads and distractions
+- Implement a better video grid layout for easier browsing
+- Add enhanced playback controls to the video player
+
+### Focus Mode
+Click the "Focus" button (eye icon) in the player controls to toggle focus mode, which dims the page and centers the video for distraction-free viewing.
+
+### Speed Control
+Click the speed button (e.g., "1x") in the player controls to open a dropdown menu and select your preferred playback speed.
+
+## Known Issues
+
+- **Manifest V3 Compatibility**: Some features may not work correctly in Manifest V3 environments
+- **TrustedHTML Warnings**: Occasionally Chrome may log TrustedHTML warnings in the console (these don't affect functionality)
+- **YouTube Updates**: Since YouTube frequently updates its UI, occasional layout issues may occur
+- **Mobile Support**: This extension is designed for desktop browsers only
+
+## Roadmap
+
+- [ ] Add keyboard shortcuts for all features
+- [ ] Implement user preferences panel
+- [ ] Add dark mode toggle
+- [ ] Create more customization options
+- [ ] Add video bookmark feature
+- [ ] Migrate fully to Manifest V3 (Due to focus on Firefox)
+- [ ] Add Clear History system via 1 clcik
 
 ## Contributing
 
-We welcome contributions from the community! If you have suggestions, improvements, or bug fixes, please feel free to open an issue or submit a pull request.
+Contributions are welcome! If you'd like to help improve YouTube Enhancer:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone git@github.com:Prarambha369/YouTube_Enhancer.git
+
+# Navigate to the directory
+cd youtube-enhancer
+
+# Install dependencies (if using npm)
+npm install
+```
+
+## Code Structure
+
+```
+youtube-enhancer/
+├── manifest.json        # Extension configuration
+├── background.js        # Background service worker
+├── content.js           # Main content script loader
+├── popup.html           # Extension popup UI
+├── popup.js             # Popup functionality
+├── feature-handlers.js  # Feature toggle handlers
+├── features/            # Individual feature modules
+│   ├── vidplayer.js     # Enhanced video player
+│   ├── shorts2long.js   # Shorts to regular video converter
+│   └── shortsblock.js   # Shorts blocking functionality
+├── styles/              # CSS styles
+│   └── theme.css        # Main theme styles
+└── icons/               # Extension icons
+    ├── icon16.png
+    ├── icon48.png
+    └── icon128.png
+```
 
 ## License
 
-This project is licensed under the MIT License. For more details, please refer to the [LICENSE](LICENSE) file.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- Special thanks to the YouTube platform for providing a space for content creators and viewers.
-- Thanks to the open-source community for their continuous support and contributions.
+- Thanks to all contributors who have helped improve this extension
+- Inspired by various YouTube enhancement tools in the open-source community
 
-## Contact Information
+---
 
-For any questions or feedback, please reach out to [Mister Bashyal](https://github.com/Prarambha369). Your input is valuable to us!
+**Made with ❤️ by Prarambha**
