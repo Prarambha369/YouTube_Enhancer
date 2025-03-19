@@ -10,9 +10,49 @@
 ytd-subscribe-button-renderer yt-button-shape button,
 #subscribe yt-button-shape a[aria-label*="Subscribe"],
 #subscribe-button yt-button-shape a[aria-label*="Subscribe"],
-ytd-subscribe-button-renderer yt-button-shape a[aria-label*="Subscribe"] {
+ytd-subscribe-button-renderer yt-button-shape a[aria-label*="Subscribe"],
+.yt-subscribe-button-view-model-wiz button {
     color: var(--yt-spec-static-brand-white) !important;
     background-color: var(--yt-spec-brand-button-background) !important;
+    border: none !important;
+    border-radius: 18px !important;
+    padding: 10px 16px !important;
+    font-weight: 500 !important;
+    transition: background-color 0.2s ease !important;
+}
+
+/* Hover state */
+#subscribe yt-button-shape button:hover,
+#subscribe-button yt-button-shape button:hover,
+ytd-subscribe-button-renderer yt-button-shape button:hover,
+#subscribe yt-button-shape a[aria-label*="Subscribe"]:hover,
+#subscribe-button yt-button-shape a[aria-label*="Subscribe"]:hover,
+ytd-subscribe-button-renderer yt-button-shape a[aria-label*="Subscribe"]:hover,
+.yt-subscribe-button-view-model-wiz button:hover {
+    background-color: var(--yt-spec-brand-button-background-hover, #ff0000) !important;
+}
+
+/* Subscribed state */
+#subscribe yt-button-shape button[aria-label*="Subscribed"],
+#subscribe-button yt-button-shape button[aria-label*="Subscribed"],
+ytd-subscribe-button-renderer yt-button-shape button[aria-label*="Subscribed"],
+#subscribe yt-button-shape a[aria-label*="Subscribed"],
+#subscribe-button yt-button-shape a[aria-label*="Subscribed"],
+ytd-subscribe-button-renderer yt-button-shape a[aria-label*="Subscribed"],
+.yt-subscribe-button-view-model-wiz button[aria-label*="Subscribed"] {
+    background-color: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1)) !important;
+    color: var(--yt-spec-text-primary, #fff) !important;
+}
+
+/* Subscribed hover state */
+#subscribe yt-button-shape button[aria-label*="Subscribed"]:hover,
+#subscribe-button yt-button-shape button[aria-label*="Subscribed"]:hover,
+ytd-subscribe-button-renderer yt-button-shape button[aria-label*="Subscribed"]:hover,
+#subscribe yt-button-shape a[aria-label*="Subscribed"]:hover,
+#subscribe-button yt-button-shape a[aria-label*="Subscribed"]:hover,
+ytd-subscribe-button-renderer yt-button-shape a[aria-label*="Subscribed"]:hover,
+.yt-subscribe-button-view-model-wiz button[aria-label*="Subscribed"]:hover {
+    background-color: var(--yt-spec-badge-chip-background-hover, rgba(255, 255, 255, 0.2)) !important;
 }
 
 /* Dark Mode - Unsubscribe Button */

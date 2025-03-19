@@ -11,6 +11,23 @@ function toggleFeature(feature, isEnabled) {
     });
 }
 
+// Handle messages from content scripts
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'getStorageData') {
+        // Add error handling for storage access
+        try {
+            chrome.storage.sync.get(message.keys, (result) => {
+                sendResponse(result || {});
+            });
+        } catch (error) {
+            console.error('Storage access error:', error);
+            sendResponse({});
+        }
+        return true;
+    }
+    return false;
+});
+
 // This function will only run in popup.html context, not in the background
 function initFeatureHandlers() {
     // Add event listeners to feature toggles

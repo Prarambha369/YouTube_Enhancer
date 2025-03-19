@@ -4,7 +4,6 @@
    VARIABLES AND BASE STYLES
    ======================================= */
 :root {
-    /* Color Palette */
     --primary-color: #60f5ac;
     --secondary-color: #60f5f5;
     --background-color: #202124;
@@ -17,12 +16,10 @@
     --error-color: #f44336;
     --processing-color: #2196f3;
 
-    /* UI Elements */
     --disabled-opacity: 0.6;
     --border-radius: 8px;
     --transition-speed: 0.3s;
 
-    /* Theme Colors */
     --gradient-bg: linear-gradient(135deg, #181818 0%, #202124 100%);
     --card-bg: rgba(255, 255, 255, 0.05);
     --card-hover: rgba(255, 255, 255, 0.1);

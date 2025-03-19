@@ -2,7 +2,6 @@ const CONFIG = {
     STATUS_UPDATE_DELAY: 2000,
     DEFAULT_ENABLED: true,
     ANIMATION_DURATION: 300,
-    // Feature names exactly matching content.js CONFIG.FEATURE_FILES keys
     FEATURES: [
         "vid",
         "shorts2long",
@@ -12,7 +11,6 @@ const CONFIG = {
     ]
 };
 
-// Set current year in footer
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -22,67 +20,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsIcon = document.getElementById('openSettings');
     const settingsPanel = document.getElementById('settings');
 
-    // Initially hide the settings panel
     settingsPanel.style.display = 'none';
 
     let isProcessingAction = false;
 
-    // Settings icon click handler - toggle settings panel visibility
     settingsIcon.addEventListener('click', () => {
         if (settingsPanel.style.display === 'none') {
-            // Show settings panel
             settingsPanel.style.display = 'block';
-            // Load feature states when settings are opened
             loadFeatureStates();
         } else {
-            // Hide settings panel
             settingsPanel.style.display = 'none';
         }
     });
 
-    // Function to load feature states from storage
     function loadFeatureStates() {
-        // Get all feature keys
-        chrome.storage.sync.get(CONFIG.FEATURES, (result) => {
-            // Update each toggle based on stored state - use the exact same names as content.js
-            CONFIG.FEATURES.forEach(feature => {
-                const toggle = document.querySelector(`.feature-toggle[data-feature="${feature}"]`);
-                if (toggle) {
-                    // Default to true if not explicitly set to false
-                    toggle.checked = result[feature] !== false;
-                    console.log(`Loading ${feature} state:`, toggle.checked);
-                }
+        // Get feature toggles
+        const featureToggles = document.querySelectorAll('.feature-toggle');
+        featureToggles.forEach(toggle => {
+            const feature = toggle.dataset.feature;
+            chrome.storage.sync.get([feature], (result) => {
+                toggle.checked = result[feature] !== false;
+                toggle.disabled = !isExtensionEnabled;
             });
         });
     }
 
-    // Add event listeners to feature toggles
+    // Function to reload the current YouTube tab
+    async function reloadYouTubeTab() {
+        try {
+            const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+            const tab = tabs[0];
+            if (tab?.url?.match(/^https?:\/\/(www\.)?youtube\.com/)) {
+                await chrome.tabs.reload(tab.id);
+                updateStatus(statusText, 'Reloading page...', 'processing');
+            }
+        } catch (error) {
+            console.error('Error reloading tab:', error);
+            updateStatus(statusText, 'Error reloading page', 'error');
+        }
+    }
+
+    // Function to send message to content script with error handling
+    async function sendMessageToContentScript(tabId, message) {
+        try {
+            await chrome.tabs.sendMessage(tabId, message);
+        } catch (error) {
+            console.error('Error sending message to content script:', error);
+            // If content script is not loaded, try to inject it
+            if (error.message.includes('Receiving end does not exist')) {
+                try {
+                    await chrome.scripting.executeScript({
+                        target: { tabId: tabId },
+                        files: ['content.js']
+                    });
+                    // Retry sending the message
+                    await chrome.tabs.sendMessage(tabId, message);
+                } catch (injectError) {
+                    console.error('Error injecting content script:', injectError);
+                    updateStatus(statusText, 'Error initializing extension', 'error');
+                }
+            }
+        }
+    }
+
+    // Toggle event handlers for feature toggles
     document.querySelectorAll('.feature-toggle').forEach(toggle => {
-        toggle.addEventListener('change', (e) => {
+        toggle.addEventListener('change', async (e) => {
+            if (isProcessingAction) return;
+            isProcessingAction = true;
+
             const feature = e.target.dataset.feature;
             const isEnabled = e.target.checked;
 
             console.log(`Toggle ${feature}:`, isEnabled);
 
-            // Save feature state to storage
             const storageUpdate = {};
             storageUpdate[feature] = isEnabled;
-            chrome.storage.sync.set(storageUpdate, () => {
-                console.log(`Saved ${feature} state:`, isEnabled);
-            });
+            await chrome.storage.sync.set(storageUpdate);
 
-            // Notify content script about feature change
-            chrome.tabs.query({ url: '*://*.youtube.com/*' }, function(tabs) {
-                tabs.forEach(tab => {
-                    chrome.tabs.sendMessage(tab.id, {
-                        action: 'toggleFeature',
-                        feature: feature,
-                        enabled: isEnabled
-                    });
+            // Send message to content script with error handling
+            const tabs = await chrome.tabs.query({ url: '*://*.youtube.com/*' });
+            for (const tab of tabs) {
+                await sendMessageToContentScript(tab.id, {
+                    action: 'toggleFeature',
+                    feature: feature,
+                    enabled: isEnabled
                 });
-            });
+            }
 
-            // Visual feedback
             const featureName = document.querySelector(`.feature-card.${feature} .feature-title`)?.textContent || feature;
             updateStatus(
                 statusText,
@@ -90,7 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 'success'
             );
 
-            // Reset status after delay
+            // Reload the page after a short delay
+            setTimeout(reloadYouTubeTab, 500);
+
             setTimeout(() => {
                 updateStatus(
                     statusText,
@@ -98,10 +125,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     isExtensionEnabled ? 'active' : 'inactive'
                 );
             }, CONFIG.STATUS_UPDATE_DELAY);
+
+            isProcessingAction = false;
         });
     });
 
-    // Check if current tab is YouTube
+    // Main extension toggle handler
+    toggle.addEventListener('change', async () => {
+        if (isProcessingAction) return;
+        isProcessingAction = true;
+
+        const isEnabled = toggle.checked;
+        applyPulseAnimation(container);
+
+        await chrome.storage.sync.set({ extensionEnabled: isEnabled });
+        isExtensionEnabled = isEnabled;
+
+        // Update feature toggle states
+        document.querySelectorAll('.feature-toggle').forEach(toggle => {
+            toggle.disabled = !isEnabled;
+        });
+
+        updateStatus(
+            statusText,
+            isEnabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
+            isEnabled ? 'active' : 'inactive'
+        );
+
+        // Send message to content script with error handling
+        const tabs = await chrome.tabs.query({ url: '*://*.youtube.com/*' });
+        for (const tab of tabs) {
+            await sendMessageToContentScript(tab.id, { 
+                action: 'toggleExtension', 
+                enabled: isEnabled 
+            });
+        }
+
+        // Reload the page after a short delay
+        setTimeout(reloadYouTubeTab, 500);
+
+        isProcessingAction = false;
+    });
+
     checkYouTubeTab()
         .then(isYouTube => {
             if (!isYouTube) {
@@ -110,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Initialize extension state from storage
             initializeExtensionState(toggle, statusText);
         })
         .catch(error => {
@@ -119,43 +183,16 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStatus(statusText, 'Error accessing tab information', 'error');
         });
 
-    // Handle messages from runtime
     chrome.runtime.onMessage.addListener((request) => {
         if (request.action === "updateToggle") {
             toggle.checked = request.enabled;
+            isExtensionEnabled = request.enabled;
             updateStatus(
                 statusText,
                 request.enabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
                 request.enabled ? 'active' : 'inactive'
             );
         }
-    });
-
-    // Toggle event listener
-    toggle.addEventListener('change', () => {
-        if (isProcessingAction) return;
-        isProcessingAction = true;
-
-        const isEnabled = toggle.checked;
-        applyPulseAnimation(container);
-
-        // Save to storage
-        chrome.storage.sync.set({ extensionEnabled: isEnabled }, () => {
-            updateStatus(
-                statusText,
-                isEnabled ? 'Extension is Active 🟢' : 'Extension is Inactive 🔴',
-                isEnabled ? 'active' : 'inactive'
-            );
-
-            // Notify content script to enable/disable features
-            chrome.tabs.query({ url: '*://*.youtube.com/*' }, function(tabs) {
-                tabs.forEach(tab => {
-                    chrome.tabs.sendMessage(tab.id, { action: 'toggleExtension', enabled: isEnabled });
-                });
-            });
-
-            isProcessingAction = false;
-        });
     });
 });
 
