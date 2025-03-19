@@ -1,0 +1,27 @@
+/* Custom styles for the YouTube video player */
+body.youtube-enhancer-enabled #movie_player {
+    background: #181818;
+    border-radius: 8px;
+}
+
+body.youtube-enhancer-enabled .html5-video-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .video-stream {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-bottom {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+body.youtube-enhancer-enabled .ytp-chrome-top {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 10px 10px 0 0 !important;
+}

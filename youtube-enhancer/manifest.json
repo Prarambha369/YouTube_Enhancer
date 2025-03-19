@@ -4,21 +4,24 @@
   "version": "1.0",
   "description": "Enhances YouTube with additional features.",
   "permissions": [
-    "activeTab",
+    "storage",
     "scripting",
-    "storage"
-  ],
-  "host_permissions": [
-    "*://*.youtube.com/*"
+    "activeTab",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
   ],
   "background": {
-    "service_worker": "service-worker.js"
+    "service_worker": "feature-handlers.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/icon48.png"
   },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content.js"],
-      "css": ["styles.css"]
+      "js": ["content.js"]
     }
   ],
   "web_accessible_resources": [
@@ -26,13 +29,5 @@
       "resources": ["icons/*.png"],
       "matches": ["*://*.youtube.com/*"]
     }
-  ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
-  }
+  ]
 }

@@ -56,6 +56,9 @@ button, input[type="checkbox"] {
 /* =======================================
    HEADER STYLING
    ======================================= */
+/* =======================================
+   HEADER STYLING
+   ======================================= */
 .header {
     display: flex;
     align-items: center;
@@ -105,12 +108,7 @@ button, input[type="checkbox"] {
 
 .header-title {
     margin: 0;
-    /* noinspection CssInvalidPropertyValue */
-    -webkit-background-clip: text;
-    /* noinspection CssInvalidPropertyValue */
-    background-clip: text;
-    background: linear-gradient(to right, var(--accent-green), var(--accent-blue));
-    color: transparent;
+    color: var(--text-color);
     font-size: 22px;
     font-weight: 600;
 }
@@ -119,6 +117,19 @@ button, input[type="checkbox"] {
     font-size: 12px;
     opacity: 0.7;
     margin: 2px 0 0;
+}
+
+
+.settings-icon {
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Smooth rotation */
+    fill: var(--accent-blue); /* Match feature card SVGs */
+}
+
+.settings-icon:hover {
+    transform: rotate(360deg);
 }
 
 /* =======================================
@@ -157,18 +168,6 @@ button, input[type="checkbox"] {
     fill: var(--accent-blue);
 }
 
-.feature-card.grid-layout svg {
-    fill: var(--accent-green);
-}
-
-.feature-card.ad-blocker svg {
-    fill: var(--accent-pink);
-}
-
-.feature-card.clean-ui svg {
-    fill: var(--accent-blue);
-}
-
 .feature-title {
     font-size: 13px;
     font-weight: 500;
@@ -196,6 +195,7 @@ button, input[type="checkbox"] {
 
 #toggle-label {
     font-weight: 500;
+    color: var(--text-color);
 }
 
 /* =======================================
@@ -213,6 +213,7 @@ button, input[type="checkbox"] {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
+    color: var(--text-color); /* Ensure text is visible */
 }
 
 /* Status Indicators */
@@ -271,7 +272,7 @@ button, input[type="checkbox"] {
     justify-content: center;
     gap: 8px;
     background: var(--card-bg);
-    color: white;
+    color: var(--text-color);
     border: none;
     border-radius: 10px;
     padding: 12px;
@@ -283,36 +284,10 @@ button, input[type="checkbox"] {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.action-button svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-}
-
-.action-button.settings {
-    color: var(--accent-blue);
-}
-
-.action-button.history {
-    color: var(--accent-pink);
-}
-
 .action-button:hover {
     background: var(--card-hover);
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Button active state */
-.action-button:active,
-.action-button.active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-#clearHistory.active {
-    background-color: #990000;
-    transform: scale(0.95);
 }
 
 /* =======================================
@@ -337,7 +312,6 @@ footer a:hover {
     color: var(--accent-green);
     text-decoration: underline;
 }
-
 /* =======================================
    ENHANCED TOGGLE SWITCH
    ======================================= */
@@ -355,8 +329,8 @@ footer a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #444;
-    transition: .4s;
+    background-color: #444; /* Default/off state */
+    transition: background-color 0.4s; /* Smooth color transition */
     border-radius: 34px;
     overflow: hidden;
 }
@@ -369,43 +343,39 @@ footer a:hover {
     left: 3px;
     bottom: 3px;
     background-color: white;
-    transition: .4s;
+    transition: transform 0.4s; /* Smooth knob movement */
     border-radius: 50%;
     z-index: 2;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 input:checked + .slider {
-    background-color: #202124;
+    background-color: var(--accent-green, #28a745); /* On state with fallback */
 }
 
 input:checked + .slider:before {
-    transform: translateX(24px);
+    transform: translateX(24px); /* Move knob to the right */
 }
 
-.slider:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 200%;
-    height: 100%;
-    background: linear-gradient(to right, #444, #444 50%, var(--accent-green) 50%, var(--accent-blue));
-    transition: .4s;
-    z-index: 1;
-}
-
-input:checked + .slider:after {
-    left: 0;
+/* Hover effect for better UX */
+.switch:hover .slider {
+    opacity: 0.9;
 }
 
 /* Disabled controls */
 input:disabled + .slider,
 .disabled {
-    opacity: var(--disabled-opacity);
+    opacity: var(--disabled-opacity, 0.5); /* Fallback opacity */
     cursor: not-allowed;
 }
 
+/* Ensure input is hidden but functional */
+input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 /* =======================================
    ANIMATIONS
    ======================================= */
@@ -422,11 +392,4 @@ input:disabled + .slider,
 
 /* Pulse animation for container */
 .pulse {
-    animation: pulse-scale 0.3s ease-in-out;
-}
-
-@keyframes pulse-scale {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-}
+    animation: pulse-scale 0.3s
