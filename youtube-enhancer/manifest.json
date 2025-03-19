@@ -7,9 +7,7 @@
     "storage",
     "scripting",
     "activeTab",
-    "webRequest",
-    "webRequestBlocking",
-    "<all_urls>"
+    "webRequest"
   ],
   "background": {
     "service_worker": "feature-handlers.js"

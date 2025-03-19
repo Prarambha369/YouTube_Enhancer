@@ -1,19 +1,25 @@
 /* features/vidplayer.css */
 #movie_player {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    min-height: 360px !important;
     position: relative !important;
     top: 0 !important;
     left: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     border-radius: 10px !important;
+    overflow: hidden !important;
 }
 
 .html5-video-container {
     width: 100% !important;
     height: 100% !important;
     border-radius: 10px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
 }
 
 .video-stream {
@@ -427,8 +433,8 @@ ytd-watch-next-secondary-results-renderer > ytd-item-section-renderer,
 
 /* Theater mode enhancements */
 ytd-watch-flexy[theater] #movie_player.vidplayz-enhanced {
-  height: calc(100vh - var(--ytd-watch-flexy-masthead-height) - 1px) !important;
-  max-height: unset !important;
+  max-height: calc(100vh - var(--ytd-watch-flexy-masthead-height)) !important;
+  margin: 0 auto !important;
   border-radius: 0 !important;
 }
 
@@ -483,16 +489,48 @@ ytd-watch-flexy[theater] #movie_player.vidplayz-enhanced ~ ytd-app ytd-watch-fle
   width: 100%;
 }
 
-/* Maintain the profile picture visibility */
+/* Ensure avatar and all its components are fully visible */
 .page-header-view-model-wiz__page-header-headline-image.yt-decorated-avatar-view-model-wiz,
 #avatar-link,
-#avatar > img,
+#avatar-section,
 .ytd-topbar-menu-button-renderer,
-ytd-guide-entry-renderer,
+ytd-topbar-menu-button-renderer,
+ytd-masthead .ytd-masthead[slot="avatar-button"],
+#avatar,
+#img.yt-img-shadow,
+#avatar > img,
 .yt-img-shadow,
 ytd-topbar-menu-button-renderer > .yt-decorated-avatar-view-model-wiz,
-#avatar-section {
+#avatar.ytd-masthead {
   display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Force avatar image to be visible with correct dimensions */
+#avatar > img.yt-img-shadow {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Make sure the avatar container is properly sized */
+#avatar {
+  width: 32px !important;
+  height: 32px !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+/* Ensure all parents of avatar are visible */
+#buttons.ytd-masthead, 
+#end.ytd-masthead {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Optional: adjust search container positioning on the page */
@@ -507,4 +545,142 @@ ytd-topbar-menu-button-renderer > .yt-decorated-avatar-view-model-wiz,
   #masthead-container #search-container.ytd-searchbox {
     max-width: 90%;
   }
+}
+
+/* Restore thumbnail hover overlay elements */
+.ytThumbnailHoverOverlayViewModelHost,
+.ytThumbnailHoverOverlayViewModelStyleCover.ytThumbnailHoverOverlayViewModelScrim,
+.yt-spec-avatar-shape__button--button-giant.yt-spec-avatar-shape__button.yt-spec-avatar-shape > .yt-spec-avatar-shape--cairo-refresh {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Enhance hover effects */
+.ytThumbnailHoverOverlayViewModelHost {
+  transition: opacity 0.2s ease !important;
+}
+
+/* Make video player respect video dimensions */
+#movie_player.vidplayz-enhanced,
+#movie_player.vidplayz-enhanced .html5-video-container,
+#movie_player.vidplayz-enhanced .html5-main-video {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: calc(100vh - 120px) !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+}
+
+/* Center the video in the player */
+#movie_player.vidplayz-enhanced .html5-video-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Maintain aspect ratio for theater mode */
+ytd-watch-flexy[theater] #movie_player.vidplayz-enhanced {
+  max-height: calc(100vh - var(--ytd-watch-flexy-masthead-height) - 20px) !important;
+  margin: 0 auto !important;
+}
+
+/* Center YouTube search bar */
+#masthead-container #search-container.ytd-searchbox {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 640px;
+  width: 100%;
+}
+
+/* Ensure the search input takes appropriate space */
+#masthead #search-container.ytd-searchbox #search-form {
+  width: 100%;
+}
+
+/* Ensure avatar and all its components are fully visible */
+.page-header-view-model-wiz__page-header-headline-image.yt-decorated-avatar-view-model-wiz,
+#avatar-link,
+#avatar-section,
+.ytd-topbar-menu-button-renderer,
+ytd-topbar-menu-button-renderer,
+ytd-masthead .ytd-masthead[slot="avatar-button"],
+#avatar,
+#img.yt-img-shadow,
+#avatar > img,
+.yt-img-shadow,
+ytd-topbar-menu-button-renderer > .yt-decorated-avatar-view-model-wiz,
+#avatar.ytd-masthead {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Force avatar image to be visible with correct dimensions */
+#avatar > img.yt-img-shadow {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Make sure the avatar container is properly sized */
+#avatar {
+  width: 32px !important;
+  height: 32px !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+/* Ensure all parents of avatar are visible */
+#buttons.ytd-masthead, 
+#end.ytd-masthead {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Optional: adjust search container positioning on the page */
+#masthead #center {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  #masthead-container #search-container.ytd-searchbox {
+    max-width: 90%;
+  }
+}
+
+/* Perfect video fit in container */
+.html5-main-video.video-stream {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  max-height: 100vh !important;
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+}
+
+/* Hide rich shelf headers */
+#rich-shelf-header,
+ytd-rich-shelf-renderer #rich-shelf-header,
+#rich-section-header,
+.ytd-rich-shelf-renderer #rich-shelf-header,
+ytd-rich-grid-renderer #rich-shelf-header {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }

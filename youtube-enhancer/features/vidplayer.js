@@ -79,12 +79,37 @@
         // Create grid controls container
         const gridControls = document.createElement('div');
         gridControls.className = 'vidplayz-grid-controls';
-        gridControls.innerHTML = `
-            <div class="vidplayz-grid-slider-container">
-                <span class="vidplayz-grid-label">Videos per row: <span id="vidplayz-grid-value">${state.currentGridSize}</span></span>
-                <input type="range" id="vidplayz-grid-slider" min="${config.minGridSize}" max="${config.maxGridSize}" value="${state.currentGridSize}" step="1">
-            </div>
-        `;
+        
+        // Create the slider container
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = 'vidplayz-grid-slider-container';
+        
+        // Create the label
+        const label = document.createElement('span');
+        label.className = 'vidplayz-grid-label';
+        label.textContent = 'Videos per row: ';
+        
+        // Create the value display
+        const valueDisplay = document.createElement('span');
+        valueDisplay.id = 'vidplayz-grid-value';
+        valueDisplay.textContent = state.currentGridSize;
+        
+        // Add value display to label
+        label.appendChild(valueDisplay);
+        
+        // Create the slider input
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.id = 'vidplayz-grid-slider';
+        slider.min = config.minGridSize;
+        slider.max = config.maxGridSize;
+        slider.value = state.currentGridSize;
+        slider.step = '1';
+        
+        // Add the elements to the container
+        sliderContainer.appendChild(label);
+        sliderContainer.appendChild(slider);
+        gridControls.appendChild(sliderContainer);
         
         // Style the grid controls
         const style = document.createElement('style');
@@ -155,9 +180,6 @@
         document.body.appendChild(gridControls);
         
         // Add event listener for the slider
-        const slider = document.getElementById('vidplayz-grid-slider');
-        const valueDisplay = document.getElementById('vidplayz-grid-value');
-        
         slider.addEventListener('input', function() {
             const newSize = parseInt(this.value);
             valueDisplay.textContent = newSize;
@@ -896,7 +918,16 @@
         };
         
         // Save to storage
-        chrome.storage.local.set({ 'vidplayz_history': state.videoHistory });
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+            chrome.storage.local.set({ 'vidplayz_history': state.videoHistory });
+        } else {
+            // Fallback to localStorage
+            try {
+                localStorage.setItem('vidplayz_videoHistory', JSON.stringify(state.videoHistory));
+            } catch (e) {
+                console.warn('VidPlayz: Unable to save video history', e);
+            }
+        }
     }
 
     // Handle video ended
@@ -928,22 +959,47 @@
     function loadUserPreferences() {
         if (!config.rememberSettings) return;
         
-        chrome.storage.sync.get('vidplayz_preferences', function(result) {
-            if (result.vidplayz_preferences) {
-                state.userPreferences = result.vidplayz_preferences;
-                
-                // Apply grid size if saved
-                if (state.userPreferences.gridSize) {
-                    state.currentGridSize = state.userPreferences.gridSize;
+        // Check if Chrome storage API is available
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+            chrome.storage.sync.get('vidplayz_preferences', function(result) {
+                if (result.vidplayz_preferences) {
+                    state.userPreferences = result.vidplayz_preferences;
+                    
+                    // Apply grid size if saved
+                    if (state.userPreferences.gridSize) {
+                        state.currentGridSize = state.userPreferences.gridSize;
+                    }
                 }
+            });
+            
+            if (chrome.storage.local) {
+                chrome.storage.local.get('vidplayz_videoHistory', function(result) {
+                    if (result.vidplayz_videoHistory) {
+                        state.videoHistory = result.vidplayz_videoHistory;
+                    }
+                });
             }
-        });
-        
-        chrome.storage.local.get('vidplayz_videoHistory', function(result) {
-            if (result.vidplayz_videoHistory) {
-                state.videoHistory = result.vidplayz_videoHistory;
+        } else {
+            // Fallback to localStorage if Chrome API is not available
+            try {
+                const savedPrefs = localStorage.getItem('vidplayz_preferences');
+                if (savedPrefs) {
+                    state.userPreferences = JSON.parse(savedPrefs);
+                    
+                    // Apply grid size if saved
+                    if (state.userPreferences.gridSize) {
+                        state.currentGridSize = state.userPreferences.gridSize;
+                    }
+                }
+                
+                const savedHistory = localStorage.getItem('vidplayz_videoHistory');
+                if (savedHistory) {
+                    state.videoHistory = JSON.parse(savedHistory);
+                }
+            } catch (e) {
+                console.warn('VidPlayz: Unable to load preferences', e);
             }
-        });
+        }
     }
 
     // Apply user preferences to player
@@ -981,7 +1037,17 @@
     function saveUserPreferences() {
         if (!config.rememberSettings) return;
         
-        chrome.storage.sync.set({ 'vidplayz_preferences': state.userPreferences });
+        // Check if Chrome storage API is available
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+            chrome.storage.sync.set({ 'vidplayz_preferences': state.userPreferences });
+        } else {
+            // Fallback to localStorage if Chrome API is not available
+            try {
+                localStorage.setItem('vidplayz_preferences', JSON.stringify(state.userPreferences));
+            } catch (e) {
+                console.warn('VidPlayz: Unable to save preferences', e);
+            }
+        }
     }
 
     // Helper function to format time in MM:SS format
