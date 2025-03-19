@@ -260,3 +260,21 @@ function applyPulseAnimation(element) {
         element.classList.remove('pulse');
     }, CONFIG.ANIMATION_DURATION);
 }
+
+// Improved checkYouTubeTab
+async function checkYouTubeTab() {
+    try {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+        return !!tab?.url?.match(/^https?:\/\/(www\.)?youtube\.com/);
+    } catch (error) {
+        console.error('Tab check error:', error);
+        return false;
+    }
+}
+
+// Enhanced message handler
+chrome.runtime.onMessage.addListener((request) => {
+    if (request.action === "historyCleared") {
+        updateStatus(statusText, 'History cleared successfully! ✓', 'success');
+        setTimeout(() => {
+            update

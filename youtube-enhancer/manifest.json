@@ -1,39 +1,38 @@
 {
-    "manifest_version": 2,
-    "name": "Enhanced YouTube Experience",
-    "version": "0.7",
-    "description": "Adds history clearing, UI improvements, and toggle controls",
-    "permissions": ["storage", "scripting", "activeTab"],
-    "host_permissions": ["*://*.youtube.com/*"],
-
-    "action": {
-      "default_icon": {
-        "16": "icons/icon16.png",
-        "32": "icons/icon32.png"
-      },
-      "default_popup": "popup.html"
-    },
-
-    "icons": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    },
-
-    "content_scripts": [{
+  "manifest_version": 3,
+  "name": "YouTube Enhancer",
+  "version": "1.0",
+  "description": "Enhances YouTube with additional features.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
       "matches": ["*://*.youtube.com/*"],
       "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_end"
-    }],
-
-    "background": {
-      "service_worker": "service-worker.js"
-    },
-
-    "web_accessible_resources": [{
+      "css": ["styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
       "resources": ["icons/*.png"],
       "matches": ["*://*.youtube.com/*"]
-    }]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
   }
+}
