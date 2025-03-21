@@ -12,18 +12,37 @@
                 COMMENT_COUNT_DISPLAY: '#comment-count-display'
             };
 
-            // Initialize the feature
+            // Initialize the feature with proper error handling and context validation
             function init() {
-                // Check if extension is enabled through proper runtime connection
-                if (!chrome.runtime?.id) {
-                    console.error('Extension context invalid');
-                    return;
-                }
+                try {
+                    // Validate browser environment
+                    if (typeof window === 'undefined' || typeof document === 'undefined') {
+                        throw new Error('Invalid browser environment');
+                    }
 
-                chrome.runtime.sendMessage({ 
-                    action: 'getStorageData', 
-                    keys: ['extensionEnabled', 'commentEnhancementsEnabled'] 
-                }, (result) => {
+                    // Validate Chrome API availability
+                    if (typeof chrome === 'undefined' || !chrome?.runtime?.id) {
+                        // Wait for Chrome APIs to be ready
+                        setTimeout(init, 100);
+                        return;
+                    }
+
+                    // Ensure we're in a valid extension context
+                    if (!chrome.runtime?.getManifest()) {
+                        throw new Error('Extension context invalid - unable to access manifest');
+                    }
+
+                    // Additional context validation
+                    if (window.location.protocol !== 'chrome-extension:' && 
+                        !window.location.href.startsWith('https://www.youtube.com')) {
+                        throw new Error('Invalid context - extension must run on YouTube or in extension context');
+                    }
+
+                    // Initialize feature settings
+                    chrome.runtime.sendMessage({ 
+                        action: 'getStorageData', 
+                        keys: ['extensionEnabled', 'commentEnhancementsEnabled'] 
+                    }, (result) => {
                     // Add null check for result
                     if (result && result.extensionEnabled === false) return;
 
@@ -35,7 +54,11 @@
 
                     enhanceSubscriptions();
                     observeChanges();
-                });
+                    });
+                } catch (error) {
+                    console.error('YouTube Enhancer initialization failed:', error.message);
+                    return;
+                }
             }
 
             // Add comment count display
@@ -67,6 +90,23 @@
 
                 // Add to header author area
                 headerAuthor.appendChild(commentCountDisplay);
+
+    // Create subscriber count display element
+    const subscriberCountDisplay = document.createElement('div');
+    subscriberCountDisplay.className = 'youtube-enhancer-subscriber-count';
+    // Get subscriber count from YouTube's DOM
+    const subCountElement = document.querySelector('yt-formatted-string#subscriber-count');
+    if (subCountElement) {
+      const countText = subCountElement.textContent.replace(/[^0-9.]/g, '');
+      const formattedSubs = formatNumber(parseFloat(countText));
+      subscriberCountDisplay.innerHTML = `
+        <span class="sub-icon">👥</span>
+        <span class="sub-count">${formattedSubs} subs</span>
+      `;
+    } else {
+      subscriberCountDisplay.textContent = 'Subscribers: N/A';
+    }
+    headerAuthor.appendChild(subscriberCountDisplay);
             }
 
             // Format number with K/M/B
@@ -108,31 +148,50 @@
 
             // Observe DOM changes to apply enhancements to dynamically loaded content
             function observeChanges() {
-                const observer = new MutationObserver((mutations) => {
-                    // Check if comments section is added
-                    const commentsSection = document.querySelector(SELECTORS.COMMENTS_SECTION);
-                    if (commentsSection && !commentsSection.classList.contains('youtube-enhancer-comments')) {
-                        enhanceComments();
-                    }
+                try {
+                    const observer = new MutationObserver((mutations) => {
+                        try {
+                            // Check if comments section is added
+                            const commentsSection = document.querySelector(SELECTORS.COMMENTS_SECTION);
+                            if (commentsSection && !commentsSection.classList.contains('youtube-enhancer-comments')) {
+                                enhanceComments();
+                            }
 
-                    // Check for subscription button changes
-                    const subButton = document.querySelector(SELECTORS.SUBSCRIPTION_BUTTON);
-                    if (subButton && !subButton.classList.contains('youtube-enhancer-subscription')) {
-                        enhanceSubscriptions();
-                    }
+                            // Check for subscription button changes
+                            const subButton = document.querySelector(SELECTORS.SUBSCRIPTION_BUTTON);
+                            if (subButton && !subButton.classList.contains('youtube-enhancer-subscription')) {
+                                enhanceSubscriptions();
+                            }
 
-                    // Check for header author area and add comment count if needed
-                    const headerAuthor = document.querySelector(SELECTORS.HEADER_AUTHOR);
-                    if (headerAuthor && !document.querySelector(SELECTORS.COMMENT_COUNT_DISPLAY)) {
-                        addCommentCountDisplay();
-                    }
-                });
+                            // Check for header author area and add comment count if needed
+                            const headerAuthor = document.querySelector(SELECTORS.HEADER_AUTHOR);
+                            if (headerAuthor && !document.querySelector(SELECTORS.COMMENT_COUNT_DISPLAY)) {
+                                addCommentCountDisplay();
+                            }
+                        } catch (error) {
+                            console.error('Error processing mutations:', error);
+                            // Continue observing despite errors
+                        }
+                    });
 
-                // Start observing
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true
-                });
+                    // Start observing with error handling
+                    observer.observe(document.body, {
+                        childList: true,
+                        subtree: true
+                    });
+
+                    // Cleanup function for observer
+                    window.addEventListener('unload', () => {
+                        try {
+                            observer.disconnect();
+                        } catch (error) {
+                            console.error('Error disconnecting observer:', error);
+                        }
+                    });
+                } catch (error) {
+                    console.error('YouTube Enhancer initialization failed:', error.message);
+                    return;
+                }
             }
 
             // Initialize on page load

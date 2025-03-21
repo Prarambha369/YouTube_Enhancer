@@ -27,8 +27,9 @@
             if (!videoId) return;
 
             // Check if we've already redirected
-            if (sessionStorage.getItem('ytEnhancerRedirected') === videoId) return;
-            sessionStorage.setItem('ytEnhancerRedirected', videoId);
+            const redirectKey = `ytEnhancerRedirected_${videoId}`;
+            if (sessionStorage.getItem(redirectKey)) return;
+            sessionStorage.setItem(redirectKey, Date.now().toString());
 
             const newUrl = new URL('/watch', currentUrl.origin);
             newUrl.searchParams.set('v', videoId);
@@ -40,8 +41,10 @@
             
             newUrl.hash = currentUrl.hash;
             
-            // Use full redirect instead of replaceState
-            window.location.href = newUrl.toString();
+            // Use history.replaceState for smoother transition
+            history.replaceState(null, '', newUrl.toString());
+            // Force reload to ensure player loads correctly
+            window.location.reload();
         } catch (error) {
             console.error('YouTube Enhancer: Error in redirectToWatchUrl:', error);
         }

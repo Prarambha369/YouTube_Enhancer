@@ -60,25 +60,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to check if content script is loaded
+    async function isContentScriptLoaded(tabId) {
+        try {
+            await chrome.tabs.sendMessage(tabId, { action: 'ping' });
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    // Function to inject content script with retry
+    async function injectContentScript(tabId, retries = 3) {
+        for (let i = 0; i < retries; i++) {
+            try {
+                await chrome.scripting.executeScript({
+                    target: { tabId: tabId },
+                    files: ['content.js']
+                });
+                // Wait for script to initialize
+                await new Promise(resolve => setTimeout(resolve, 100));
+                if (await isContentScriptLoaded(tabId)) {
+                    return true;
+                }
+            } catch (error) {
+                console.warn(`Injection attempt ${i + 1} failed:`, error);
+                if (i === retries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, 200 * (i + 1)));
+            }
+        }
+        return false;
+    }
+
     // Function to send message to content script with error handling
     async function sendMessageToContentScript(tabId, message) {
         try {
+            // Check if we have permission to access the tab
+            const tab = await chrome.tabs.get(tabId);
+            if (!tab) {
+                throw new Error('Tab not found');
+            }
+
+            // First attempt to send message
             await chrome.tabs.sendMessage(tabId, message);
         } catch (error) {
-            console.error('Error sending message to content script:', error);
+            console.warn('Initial message send failed:', error);
+
             // If content script is not loaded, try to inject it
             if (error.message.includes('Receiving end does not exist')) {
                 try {
-                    await chrome.scripting.executeScript({
-                        target: { tabId: tabId },
-                        files: ['content.js']
-                    });
-                    // Retry sending the message
+                    const injected = await injectContentScript(tabId);
+                    if (!injected) {
+                        throw new Error('Failed to inject content script');
+                    }
+                    // Retry sending the message after successful injection
                     await chrome.tabs.sendMessage(tabId, message);
                 } catch (injectError) {
                     console.error('Error injecting content script:', injectError);
                     updateStatus(statusText, 'Error initializing extension', 'error');
+                    throw injectError;
                 }
+            } else {
+                updateStatus(statusText, 'Error communicating with page', 'error');
+                throw error;
             }
         }
     }

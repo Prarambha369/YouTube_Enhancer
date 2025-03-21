@@ -34,12 +34,18 @@
     });
 
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.action === 'toggleExtension') {
+      if (message.action === 'ping') {
+        // Respond to ping messages from popup.js
+        sendResponse({ status: 'alive' });
+      } else if (message.action === 'toggleExtension') {
         handleToggleExtension(message.enabled);
+        sendResponse({ status: 'success' });
       } else if (message.action === 'toggleFeature') {
         handleToggleFeature(message.feature, message.enabled);
+        sendResponse({ status: 'success' });
+      } else {
+        sendResponse({ status: 'unknown_action' });
       }
-      sendResponse({ status: 'success' });
       return true;
     });
   }

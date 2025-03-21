@@ -238,78 +238,90 @@
         controlsRight.insertBefore(focusModeButton, controlsRight.firstChild);
     }
 
-    // Add custom speed control
+    // Add custom speed control with enhanced UI
     function addSpeedControl() {
         const controlsRight = state.player.querySelector('.ytp-right-controls');
         if (!controlsRight) return;
         
-        // Create speed button
+        // Create speed button with enhanced styling
         const speedButton = document.createElement('button');
-        speedButton.className = 'ytp-button youtube-enhancer-speed-button';
+        speedButton.className = 'ytp-button vidplayz-speed-button';
         speedButton.title = 'Playback Speed';
         
-        // Create text element for speed display
+        // Create text element for speed display with enhanced styling
         const speedText = document.createElement('span');
+        speedText.className = 'vidplayz-speed-text';
         speedText.textContent = '1x';
         speedButton.appendChild(speedText);
         
-        // Create speed menu
+        // Create speed menu with enhanced styling
         const speedMenu = document.createElement('div');
-        speedMenu.className = 'youtube-enhancer-speed-menu';
-        speedMenu.style.display = 'none';
-        speedMenu.style.position = 'absolute';
-        speedMenu.style.backgroundColor = 'rgba(28, 28, 28, 0.9)';
-        speedMenu.style.borderRadius = '4px';
-        speedMenu.style.padding = '8px 0';
-        speedMenu.style.zIndex = '2000';
-        speedMenu.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
+        speedMenu.className = 'vidplayz-speed-menu';
         
-        // Add speed options
+        // Add speed options with enhanced styling
         config.speedOptions.forEach(speed => {
             const option = document.createElement('div');
-            option.className = 'youtube-enhancer-speed-option';
+            option.className = 'vidplayz-speed-option';
             option.textContent = `${speed}x`;
-            option.style.padding = '8px 16px';
-            option.style.color = 'white';
-            option.style.cursor = 'pointer';
-            option.style.fontSize = '14px';
             
-            // Highlight on hover
-            option.addEventListener('mouseover', () => {
-                option.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-            });
-            
-            option.addEventListener('mouseout', () => {
-                option.style.backgroundColor = '';
-            });
+            // Add active state for current speed
+            if (speed === 1) {
+                option.classList.add('active');
+            }
             
             option.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const video = state.player.querySelector('video');
                 if (!video) return;
                 
+                // Update speed and UI
                 video.playbackRate = speed;
                 speedText.textContent = `${speed}x`;
                 speedMenu.style.display = 'none';
+                
+                // Update active state
+                speedMenu.querySelectorAll('.vidplayz-speed-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                option.classList.add('active');
+                
+                // Save speed preference
+                localStorage.setItem('youtube-enhancer-speed', speed);
+                
                 showNotification(`Speed: ${speed}x`);
             });
             
             speedMenu.appendChild(option);
         });
         
-        // Toggle speed menu on click
+        // Toggle speed menu with enhanced positioning
         speedButton.addEventListener('click', (e) => {
             e.stopPropagation();
             
-            if (speedMenu.style.display === 'none') {
+            const isVisible = speedMenu.style.display === 'block';
+            
+            // Hide all other menus first
+            document.querySelectorAll('.vidplayz-speed-menu').forEach(menu => {
+                menu.style.display = 'none';
+            });
+            
+            if (!isVisible) {
                 speedMenu.style.display = 'block';
                 
-                // Position menu
+                // Enhanced positioning
                 const rect = speedButton.getBoundingClientRect();
-                speedMenu.style.top = `${rect.bottom}px`;
+                const menuRect = speedMenu.getBoundingClientRect();
+                
+                // Position above by default
+                let top = rect.top - menuRect.height - 8;
+                
+                // If not enough space above, position below
+                if (top < 0) {
+                    top = rect.bottom + 8;
+                }
+                
+                speedMenu.style.top = `${top}px`;
                 speedMenu.style.right = `${window.innerWidth - rect.right}px`;
-            } else {
-                speedMenu.style.display = 'none';
             }
         });
         
@@ -318,18 +330,39 @@
             speedMenu.style.display = 'none';
         });
         
-        // Update speed button text when speed changes
+        // Restore speed preference
+        const savedSpeed = parseFloat(localStorage.getItem('youtube-enhancer-speed')) || 1;
         const video = state.player.querySelector('video');
         if (video) {
+            video.playbackRate = savedSpeed;
+            speedText.textContent = `${savedSpeed}x`;
+            
+            // Update active state
+            speedMenu.querySelectorAll('.vidplayz-speed-option').forEach(opt => {
+                if (parseFloat(opt.textContent) === savedSpeed) {
+                    opt.classList.add('active');
+                }
+            });
+            
+            // Update speed display on change
             video.addEventListener('ratechange', () => {
-                speedText.textContent = `${video.playbackRate}x`;
+                const currentSpeed = video.playbackRate;
+                speedText.textContent = `${currentSpeed}x`;
+                
+                // Update active state
+                speedMenu.querySelectorAll('.vidplayz-speed-option').forEach(opt => {
+                    const optSpeed = parseFloat(opt.textContent);
+                    opt.classList.toggle('active', optSpeed === currentSpeed);
+                });
+                
+                // Save preference
+                localStorage.setItem('youtube-enhancer-speed', currentSpeed);
             });
         }
         
         controlsRight.insertBefore(speedButton, controlsRight.firstChild);
         document.body.appendChild(speedMenu);
     }
-
     // Show notification
     function showNotification(message) {
         // Remove existing notification if any
@@ -368,57 +401,31 @@
         // Remove after delay
         setTimeout(() => {
             notification.style.opacity = '0';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
+            setTimeout(() => notification.remove(), 300);
         }, 3000);
     }
 
-    // Cleanup function (called when feature is disabled)
+    // Cleanup function for content.js
     function cleanup() {
-        if (!state.initialized) return;
+        // Remove styles
+        const styles = [
+            'youtube-enhancer-clean-view',
+            'youtube-enhancer-grid-layout', 
+            'youtube-enhancer-focus-mode-style'
+        ];
         
-        console.log('YouTube Enhancer: Cleaning up video player improvements');
+        styles.forEach(id => {
+            const style = document.getElementById(id);
+            if (style) style.remove();
+        });
         
-        // Remove custom styles
-        const cleanViewStyle = document.getElementById('youtube-enhancer-clean-view');
-        if (cleanViewStyle) {
-            cleanViewStyle.remove();
-        }
-        
-        const gridLayoutStyle = document.getElementById('youtube-enhancer-grid-layout');
-        if (gridLayoutStyle) {
-            gridLayoutStyle.remove();
-        }
-        
-        const focusModeStyle = document.getElementById('youtube-enhancer-focus-mode-style');
-        if (focusModeStyle) {
-            focusModeStyle.remove();
-        }
-        
-        // Remove focus mode class if active
-        document.body.classList.remove('youtube-enhancer-focus-mode');
-        
-        // Remove custom buttons
-        document.querySelectorAll('.youtube-enhancer-focus-button, .youtube-enhancer-speed-button').forEach(el => el.remove());
-        
-        // Remove speed menu
-        const speedMenu = document.querySelector('.youtube-enhancer-speed-menu');
-        if (speedMenu) {
-            speedMenu.remove();
-        }
-        
-        // Remove notifications
-        const notification = document.querySelector('.youtube-enhancer-notification');
-        if (notification) {
-            notification.remove();
-        }
-        
+        // Reset state
         state.initialized = false;
+        state.player = null;
+        
+        console.log('YouTube Enhancer: Video player improvements cleaned up');
     }
 
-    // Return the public API
-    return {
-        init: initialize
-    };
+    // Export initialize function 
+    return initialize;
 })();
