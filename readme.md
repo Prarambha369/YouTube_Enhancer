@@ -85,16 +85,38 @@ youtube-enhancer/
     ├── icon48.png
     └── icon128.png
 ```
+├── manifest.json        # Extension configuration
+├── background.js        # Background service worker
+├── content.js           # Main content script loader
+├── popup.html           # Extension popup UI
+├── popup.js             # Popup functionality
+├── feature-handlers.js  # Feature toggle handlers
+├── features/            # Individual feature modules
+│   ├── vidplayer.js     # Enhanced video player
+│   ├── shorts2long.js   # Shorts to regular video converter
+│   └── shortsblock.js   # Shorts blocking functionality
+├── styles/              # CSS styles
+│   └── theme.css        # Main theme styles
+└── icons/               # Extension icons
+    ├── icon16.png
+    ├── icon48.png
+    └── icon128.png
+```
 
 ## License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
 - Thanks to all contributors who have helped improve this extension
 - Inspired by various YouTube enhancement tools in the open-source community
+- Thanks to all contributors who have helped improve this extension
+- Inspired by various YouTube enhancement tools in the open-source community
 
 ---
+---
 
+**Made with ❤️ by Prarambha**
 **Made with ❤️ by Prarambha**
